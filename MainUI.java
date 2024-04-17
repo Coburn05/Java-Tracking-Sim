@@ -33,12 +33,15 @@ public class MainUI extends JPanel {
         do {
             g.clearRect(0, 0, width, height);
             g.setColor(Color.black);
-            rocket.move(width, height, targetDot.getXLoc(), targetDot.getYLoc());
+            if(rocket.shouldRemove()) {
+                rocket = null;
+                rocket = new Rocket(-100, -111, g);
+            }
+            rocket.move(width, height, targetDot.getXLoc(), targetDot.getYLoc(), targetDot.getDx(), targetDot.getDy());
             targetDot.move(width, height);
             targetDot.drawDot(g);
             rocket.drawRocket(g);
             this.canvas.repaint();
-
             try {
                 Thread.sleep(50L);
             } catch (InterruptedException e) {
