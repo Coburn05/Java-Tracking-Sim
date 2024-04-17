@@ -8,12 +8,15 @@ public class Rocket {
     private int yLoc;
     private int dx = 15;
     private int dy = 15;
+    private Graphics graphics;
+    private boolean shouldRemove = false;
 
     public Rocket(int xLoc, int yLoc, Graphics g) {
         this.xLoc = xLoc;
         this.yLoc = yLoc;
-        g.setColor(Color.ORANGE);
-        g.fillOval(this.xLoc, this.yLoc, 10, 10);
+        graphics  = g;
+        graphics.setColor(Color.ORANGE);
+        graphics.fillOval(this.xLoc, this.yLoc, 10, 10);
     }
 
     public Rocket() {
@@ -21,34 +24,54 @@ public class Rocket {
         yLoc = 20;
     }
 
+    public boolean shouldRemove() {
+        return shouldRemove;
+    }
+
     public void drawRocket(Graphics g) {
-        g.setColor(Color.lightGray);
+        g.setColor(Color.ORANGE);
         g.fillOval(this.xLoc, this.yLoc, 10, 10);
     }
 
-    public void move(int screenWidth, int screenHeight, int targetX, int targetY) {
-        // calculate direction to target
-        dx = targetX - xLoc;
-        dy = targetY - yLoc;
+    public void move(int screenWidth, int screenHeight, int targetX, int targetY, int targetVelocityX, int targetVelocityY) {
+        // Calculate direction to current target position
+        int dx = targetX - xLoc;
+        int dy = targetY - yLoc;
+        int missileSpeed = 30;
 
-        double magnitudeOfVelocity = Math.sqrt(dx * dx + dy * dy);
-        double normalizedDx = dx / magnitudeOfVelocity;
-        double normalizedDy = dy / magnitudeOfVelocity;
+        // Calculate distance to target
+        double distanceToTarget = Math.sqrt(dx * dx + dy * dy);
 
-        // Move rocket towards the target
-        this.xLoc += normalizedDx * 15; // Adjust the speed as needed
-        this.yLoc += normalizedDy * 15; // Adjust the speed as needed
+        // Calculate time to intercept (assuming constant velocity)
+        double timeToIntercept = distanceToTarget / missileSpeed;
 
-        if (this.xLoc <= 15 || this.xLoc >= screenWidth - 15) {
+        // Predict future position of target
+        int futureTargetX = targetX + (int) (targetVelocityX * timeToIntercept);
+        int futureTargetY = targetY + (int) (targetVelocityY * timeToIntercept);
+
+        // Calculate direction to intercept point
+        int interceptDx = futureTargetX - xLoc;
+        int interceptDy = futureTargetY - yLoc;
+
+        // Normalize direction vector
+        double magnitudeOfVelocity = Math.sqrt(interceptDx * interceptDx + interceptDy * interceptDy);
+        double normalizedDx = interceptDx / magnitudeOfVelocity;
+        double normalizedDy = interceptDy / magnitudeOfVelocity;
+
+        // Move missile towards the intercept point
+        this.xLoc += normalizedDx * missileSpeed;
+        this.yLoc += normalizedDy * missileSpeed;
+
+        if ((xLoc > futureTargetX - 10 && xLoc < futureTargetX + 10) && (yLoc > futureTargetY - 10 && yLoc < futureTargetY + 10)) {
+            shouldRemove = true;
+            System.out.println("hit");
+        }
+
+        // Bounce off the walls
+        if (this.xLoc <= 0 || this.xLoc >= screenWidth - 10) {
             this.dx *= -1;
         }
-
-        if(this.xLoc == targetX && this.yLoc == targetY) {
-            xLoc = 20;
-            yLoc = 20;
-        }
-
-        if (this.yLoc <= 15 || this.yLoc >= screenHeight - 15) {
+        if (this.yLoc <= 0 || this.yLoc >= screenHeight - 10) {
             this.dy *= -1;
         }
     }
