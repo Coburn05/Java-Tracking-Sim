@@ -24,6 +24,11 @@ public class Rocket {
         yLoc = 20;
     }
 
+    public Rocket(int xLoc, int yLoc) {
+        this.xLoc = xLoc;
+        this.yLoc = yLoc;
+    }
+
     public boolean shouldRemove() {
         return shouldRemove;
     }
@@ -33,11 +38,15 @@ public class Rocket {
         g.fillOval(this.xLoc, this.yLoc, 10, 10);
     }
 
+    public static Rocket addRocket(int x, int y) {
+        return new Rocket(x, y);
+    }
+
     public void move(int screenWidth, int screenHeight, int targetX, int targetY, int targetVelocityX, int targetVelocityY) {
         // Calculate direction to current target position
         int dx = targetX - xLoc;
         int dy = targetY - yLoc;
-        int missileSpeed = 30;
+        int missileSpeed = 15;
 
         // Calculate distance to target
         double distanceToTarget = Math.sqrt(dx * dx + dy * dy);
