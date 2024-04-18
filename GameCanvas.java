@@ -12,8 +12,7 @@ public class GameCanvas extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 System.out.println("mouse was hit");
                 // create rocket
-                Rocket rocket = new Rocket(e.getX(), e.getY(), img.getGraphics());
-                repaint();
+                Main.getMainUI().addRocket(e.getX(),e.getY());
             }
         });
     }
