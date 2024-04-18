@@ -9,7 +9,7 @@ public class TargetDot {
     private final int VELOCITY_CONSTANT = 5;
     private double maxAngleChange = 30;
     private int numStepsOnCurve = 0;
-    double angleChange = (Math.random() * maxAngleChange) - (maxAngleChange / 2.0); // Random angle change within a certain range
+    //double angleChange = (Math.random() * maxAngleChange) - (maxAngleChange / 2.0); // Random angle change within a certain range
 
     public int getXLoc() {
         return this.xLoc;
@@ -33,22 +33,8 @@ public class TargetDot {
     }
 
     public void move(int screenWidth, int screenHeight) {
-        // Adjust velocity randomly to create smooth curves
-        if(numStepsOnCurve == 100) {
-            angleChange = (Math.random() * maxAngleChange) - (maxAngleChange / 2.0); // Random angle change within a certain range
-        } else {
-            numStepsOnCurve = 0;
-        }
-
-        // Update velocity components with the adjusted values
-        double newDx = this.dx * Math.cos(angleChange) - this.dy * Math.sin(angleChange);
-        double newDy = this.dx * Math.sin(angleChange) + this.dy * Math.cos(angleChange);
-
-        // Update position with the adjusted velocity
-        this.xLoc += (int) newDx;
-        this.yLoc += (int) newDy;
-
-        // Reflect off the walls
+        this.xLoc += this.dx;
+        this.yLoc += this.dy;
         if (this.xLoc <= 15 || this.xLoc >= screenWidth - 15) {
             this.dx *= -1;
         }
@@ -56,6 +42,5 @@ public class TargetDot {
         if (this.yLoc <= 15 || this.yLoc >= screenHeight - 15) {
             this.dy *= -1;
         }
-        numStepsOnCurve++;
     }
 }
