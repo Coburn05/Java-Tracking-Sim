@@ -53,7 +53,7 @@ public class GameCanvas extends JPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 char keyPressed = (char) Character.toLowerCase((e.getKeyChar()));
-                keyAction(keyPressed);
+                Main.getMainUI().moveTargetDot(keyPressed);
             }
 
             @Override
