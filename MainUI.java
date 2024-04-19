@@ -38,6 +38,29 @@ public class MainUI extends JPanel {
         listOfRocketsToAdd.add(new Rocket(x, y));
     }
 
+    public void moveTargetDot(char key) {
+        switch (key) {
+            case 'w':
+                targetDot.moveUp();
+                System.out.println("W");
+                break;
+            case 'a':
+                targetDot.moveLeft();
+                System.out.println("A");
+                break;
+            case 's':
+                targetDot.moveDown();
+                System.out.println("S");
+                break;
+            case 'd':
+                targetDot.moveRight();
+                System.out.println("D");
+                break;
+            default:
+                break;
+        }
+    }
+
     public void draw(int width, int height) {
         while(true) {
             updateGraphics(width, height, image.getGraphics());
