@@ -2,14 +2,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class TargetDot {
-    private int xLoc = 20;
-    private int yLoc = 20;
-    private int dx = 5;
-    private int dy = -5;
-    private final int VELOCITY_CONSTANT = 5;
-    private double maxAngleChange = 30;
-    private int numStepsOnCurve = 0;
-    //double angleChange = (Math.random() * maxAngleChange) - (maxAngleChange / 2.0); // Random angle change within a certain range
+    private int xLoc = 200;
+    private int yLoc = 200;
+    private int dx = 0;
+    private int dy = 0;
+    private int curveStepsCount = 0;
+    private double angle = 0;
 
     public int getXLoc() {
         return this.xLoc;
@@ -32,9 +30,41 @@ public class TargetDot {
         g.fillOval(this.xLoc, this.yLoc, 15, 15);
     }
 
+    public void moveUp() {
+        // W
+        if(dy > -8) {
+            dy -= 1;
+        }
+    }
+
+    public void moveLeft() {
+        // A
+        if(dx > -8) {
+            dx -= 1;
+        }
+    }
+
+    public void moveDown() {
+        // S
+        if(dy < 8) {
+            dy += 1;
+        }
+    }
+
+    public void moveRight() {
+        // D
+        if(dx < 8) {
+            dx += 1;
+        }
+    }
+
     public void move(int screenWidth, int screenHeight) {
+        // Move according to current direction
+
         this.xLoc += this.dx;
         this.yLoc += this.dy;
+
+        // Check for collision with walls and change direction
         if (this.xLoc <= 15 || this.xLoc >= screenWidth - 15) {
             this.dx *= -1;
         }
