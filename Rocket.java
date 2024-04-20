@@ -10,6 +10,7 @@ public class Rocket {
     private int dy = 15;
     private Graphics graphics;
     private boolean shouldRemove = false;
+    private double minTurningRadius = 10;
 
     public Rocket(int xLoc, int yLoc, Graphics g) {
         this.xLoc = xLoc;
@@ -67,13 +68,18 @@ public class Rocket {
         double normalizedDx = interceptDx / magnitudeOfVelocity;
         double normalizedDy = interceptDy / magnitudeOfVelocity;
 
-        // Move missile towards the intercept point
-        this.xLoc += normalizedDx * missileSpeed;
-        this.yLoc += normalizedDy * missileSpeed;
+        // Calculate minimum turning radius
+        double minTurningRadiusX = normalizedDx * minTurningRadius;
+        double minTurningRadiusY = normalizedDy * minTurningRadius;
 
-        if ((xLoc > futureTargetX - 10 && xLoc < futureTargetX + 10) && (yLoc > futureTargetY - 10 && yLoc < futureTargetY + 10)) {
+        // Move missile towards the intercept point
+        this.xLoc += minTurningRadiusX;
+        this.yLoc += minTurningRadiusY;
+
+        // Check if missile is close enough to target
+        if (Math.abs(xLoc - targetX) <= 10 && Math.abs(yLoc - targetY) <= 10) {
             shouldRemove = true;
-            System.out.println("hit");
+            System.out.println("Hit");
         }
 
         // Bounce off the walls
@@ -84,4 +90,5 @@ public class Rocket {
             this.dy *= -1;
         }
     }
+
 }
